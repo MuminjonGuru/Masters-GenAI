@@ -19,9 +19,9 @@ A Streamlit-based AI-powered chat application that allows users to interact with
 - **Backend**: Python 3.9+
 - **Frontend**: Streamlit
 - **Database**: SQLite (Northwind sample database)
-- **LLM**: OpenAI GPT-3.5-turbo/GPT-4 with function calling
-- **Visualization**: Plotly, Matplotlib
-- **Integration**: GitHub API for support tickets
+- **LLM**: OpenAI GPT-4 Turbo with function calling
+- **Visualization**: Plotly
+- **Integration**: GitHub API (PyGithub) for support tickets
 
 ## Project Structure
 
@@ -85,9 +85,16 @@ cp .env.example .env
 ```
 
 Edit `.env` and add:
+
+**Required:**
 - `OPENAI_API_KEY`: Your OpenAI API key
-- `GITHUB_TOKEN`: Your GitHub personal access token
-- `GITHUB_REPO`: Your GitHub repository (format: username/repo-name)
+- `OPENAI_MODEL`: Model to use (default: `gpt-4-turbo`)
+
+**Optional (for GitHub support tickets):**
+- `GITHUB_TOKEN`: Your GitHub Personal Access Token (classic) with `repo` scope
+  - Create at: https://github.com/settings/tokens
+- `GITHUB_REPO`: Your GitHub repository (format: `username/repo-name`)
+  - Example: `MuminjonGuru/Masters-GenAI`
 
 ### 5. Run the application
 
@@ -111,11 +118,44 @@ The Northwind database is a sample database originally provided with Microsoft A
 - Employees
 - Shippers
 
-**Total Records**: 3000+ rows across all tables
+**Total Records**: 625,896+ rows across all tables (with 609,283 rows in Order Details alone)
 
 ## Usage Examples
 
-(Screenshots and detailed usage instructions will be added here)
+### Starting the Application
+
+```bash
+streamlit run app.py
+```
+
+The application will open in your browser at `http://localhost:8501`
+
+### Sample Queries
+
+The sidebar includes 7 pre-configured sample queries:
+- "How many customers do we have?"
+- "Show top 5 products by sales"
+- "List all employees"
+- "What are the product categories?"
+- "Show orders from 2023"
+- "Create a support ticket for testing the integration"
+- "I need help with a complex query, please create a support ticket"
+
+Click any sample query to populate the chat input, then press Enter or click "Send 🚀"
+
+### Features Overview
+
+1. **Natural Language Queries**: Ask questions in plain English
+   - Example: "What are the top selling products in 2023?"
+
+2. **Data Export**: Request exports in your queries
+   - Example: "Export all customers to Excel"
+
+3. **Visualizations**: Ask for charts and graphs
+   - Example: "Create a bar chart of sales by category"
+
+4. **Support Tickets**: Create GitHub issues for help
+   - Example: "I need help analyzing customer trends, create a support ticket"
 
 ## Safety Features
 
@@ -133,13 +173,17 @@ The agent has access to the following tools:
 3. **generate_chart**: Create visualizations from data
 4. **create_support_ticket**: Create GitHub issues for support requests
 
-## Sample Queries
+## Sample Queries (Available in Sidebar)
 
-- "Show me the top 10 customers by total order value"
-- "What are the most popular products?"
-- "Export the list of all employees to Excel"
-- "Create a chart showing sales by category"
-- "I need help with a complex query, create a support ticket"
+- "How many customers do we have?"
+- "Show top 5 products by sales"
+- "List all employees"
+- "What are the product categories?"
+- "Show orders from 2023"
+- "Create a support ticket for testing the integration"
+- "I need help with a complex query, please create a support ticket"
+
+**Pro Tip**: Click any sample query to populate the input field, edit if needed, then send!
 
 ## Troubleshooting
 
@@ -149,14 +193,48 @@ The agent has access to the following tools:
 - **Solution**: Make sure your `.env` file has the correct `OPENAI_API_KEY`
 
 **Issue**: GitHub token error
-- **Solution**: Verify your `GITHUB_TOKEN` has the necessary permissions (repo access)
+- **Solution**: Verify your `GITHUB_TOKEN` has the necessary permissions (repo scope)
+- Create token at: https://github.com/settings/tokens
+- Select "repo" scope when creating the token
+
+**Issue**: Context length exceeded error
+- **Solution**: This has been optimized. If you still see this, you may be using an older model. Use `gpt-4-turbo` in your `.env` file.
 
 **Issue**: Database locked
 - **Solution**: Close any other applications that might be accessing northwind.db
 
 ## Architecture
 
-(Architecture diagram and detailed explanation will be added here)
+### Data Flow
+
+```
+User Input (Streamlit UI)
+    ↓
+NorthwindAgent (OpenAI Function Calling)
+    ↓
+Tool Selection & Execution
+    ├── execute_sql_query → SQLSafetyValidator → DatabaseManager → Results
+    ├── export_data_to_file → DataExporter → CSV/Excel file
+    ├── generate_chart → ChartGenerator → Plotly visualization
+    └── create_support_ticket → GitHubIssueCreator → GitHub Issue
+    ↓
+Response to User (Streamlit UI)
+```
+
+### Key Components
+
+- **app.py**: Streamlit UI with chat interface
+- **src/agent/llm_agent.py**: OpenAI agent with GPT-4 Turbo
+- **src/agent/tools.py**: Function calling tool definitions and executor
+- **src/agent/safety.py**: SQL query safety validator
+- **src/database/db_manager.py**: SQLite database operations (read-only)
+- **src/database/schema_helper.py**: Optimized schema context for LLM
+- **src/utils/export.py**: CSV/Excel data export
+- **src/utils/visualizations.py**: Plotly chart generation
+- **src/utils/logger.py**: Comprehensive logging system
+- **src/github_integration/issue_creator.py**: GitHub API integration
+
+See `CLAUDE.md` for detailed technical documentation.
 
 ## Contributing
 

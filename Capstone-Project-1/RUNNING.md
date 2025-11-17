@@ -18,11 +18,18 @@ Create a `.env` file in the project root:
 cp .env.example .env
 ```
 
-Edit `.env` and add your OpenAI API key:
+Edit `.env` and add your credentials:
 
+**Required:**
 ```
 OPENAI_API_KEY=your_openai_api_key_here
-OPENAI_MODEL=gpt-3.5-turbo
+OPENAI_MODEL=gpt-4-turbo
+```
+
+**Optional (for GitHub support tickets):**
+```
+GITHUB_TOKEN=your_github_token_here
+GITHUB_REPO=username/repository-name
 ```
 
 ### 3. Run the Application
@@ -56,15 +63,17 @@ The application will open in your browser at `http://localhost:8501`
 
 ### 💡 Sample Queries
 
-Try these queries to get started:
+The sidebar includes 7 pre-configured sample queries you can click to try:
 
 - "How many customers do we have?"
-- "Show me the top 10 products by sales"
-- "What are all the product categories?"
-- "List employees and their titles"
-- "Show orders from Germany"
-- "Create a chart of sales by category"
-- "Export the customer list to Excel"
+- "Show top 5 products by sales"
+- "List all employees"
+- "What are the product categories?"
+- "Show orders from 2023"
+- "Create a support ticket for testing the integration"
+- "I need help with a complex query, please create a support ticket"
+
+**Tip**: Click any sample query to populate the input field, edit if needed, then send!
 
 ## Troubleshooting
 
