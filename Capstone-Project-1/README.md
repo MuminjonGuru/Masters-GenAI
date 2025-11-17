@@ -14,7 +14,9 @@ A Streamlit-based AI-powered chat application that allows users to interact with
 - **Safety Features**: Built-in SQL injection protection and query validation
 - **Comprehensive Logging**: Console logging for all agent actions and queries
 
-<details>
+## Screenshots
+
+<details open>
   <summary>📷 Click to expand screenshots (00 → 04)</summary>
 
   <!-- Center row of clickable thumbnails -->
