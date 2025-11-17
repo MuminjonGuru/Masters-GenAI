@@ -71,8 +71,6 @@ def initialize_session_state():
         st.session_state.db_stats = None
     if 'initialized' not in st.session_state:
         st.session_state.initialized = False
-    if 'selected_query' not in st.session_state:
-        st.session_state.selected_query = None
 
 
 def initialize_agent():
@@ -133,7 +131,7 @@ def display_sidebar():
 
         for query in sample_queries:
             if st.button(query, key=f"sample_{query}", use_container_width=True):
-                st.session_state.selected_query = query
+                st.session_state.messages.append({"role": "user", "content": query})
                 st.rerun()
 
         st.markdown("---")
@@ -230,27 +228,8 @@ def display_chat_interface():
                         for tool_call in message["tool_calls"]:
                             st.json(tool_call)
 
-    # Chat input - use text_input with form to allow pre-filling
-    with st.form(key="chat_form", clear_on_submit=True):
-        # Get the default value from selected query
-        default_value = st.session_state.selected_query if st.session_state.selected_query else ""
-
-        prompt = st.text_input(
-            "Ask me anything about the Northwind database...",
-            value=default_value,
-            key="chat_input_field",
-            label_visibility="collapsed",
-            placeholder="Ask me anything about the Northwind database..."
-        )
-
-        submit_button = st.form_submit_button("Send 🚀", use_container_width=True)
-
-        # Clear the selected query after using it
-        if st.session_state.selected_query:
-            st.session_state.selected_query = None
-
-    # Process the message when submitted
-    if submit_button and prompt:
+    # Chat input
+    if prompt := st.chat_input("Ask me anything about the Northwind database..."):
         # Add user message
         st.session_state.messages.append({"role": "user", "content": prompt})
 
@@ -284,9 +263,6 @@ def display_chat_interface():
                         "role": "assistant",
                         "content": error_msg
                     })
-
-        # Rerun to show the new messages
-        st.rerun()
 
 
 def display_tool_results(tool_calls):
