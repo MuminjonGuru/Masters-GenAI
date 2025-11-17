@@ -71,6 +71,10 @@ def initialize_session_state():
         st.session_state.db_stats = None
     if 'initialized' not in st.session_state:
         st.session_state.initialized = False
+    if 'user_input' not in st.session_state:
+        st.session_state.user_input = ""
+    if 'input_counter' not in st.session_state:
+        st.session_state.input_counter = 0
 
 
 def initialize_agent():
@@ -139,7 +143,8 @@ def display_sidebar():
 
         for query in sample_queries:
             if st.button(query, key=f"sample_{query}", use_container_width=True):
-                st.session_state.messages.append({"role": "user", "content": query})
+                st.session_state.user_input = query
+                st.session_state.input_counter += 1
                 st.rerun()
 
         st.markdown("---")
@@ -236,41 +241,65 @@ def display_chat_interface():
                         for tool_call in message["tool_calls"]:
                             st.json(tool_call)
 
-    # Chat input
-    if prompt := st.chat_input("Ask me anything about the Northwind database..."):
-        # Add user message
-        st.session_state.messages.append({"role": "user", "content": prompt})
+    # Chat input with custom text input to support pre-filling
+    col1, col2 = st.columns([6, 1])
 
-        # Display user message
-        with st.chat_message("user"):
-            st.markdown(prompt)
+    with col1:
+        prompt = st.text_input(
+            "Ask me anything about the Northwind database...",
+            value=st.session_state.user_input,
+            key=f"text_input_{st.session_state.input_counter}",
+            label_visibility="collapsed",
+            placeholder="Ask me anything about the Northwind database..."
+        )
 
-        # Get agent response
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = st.session_state.agent.chat(prompt)
+    with col2:
+        send_button = st.button("Send 🚀", use_container_width=True, type="primary")
 
-                if response['success']:
-                    st.markdown(response['response'])
+    # Process the message when send button is clicked or Enter is pressed
+    if (send_button or prompt != st.session_state.user_input) and prompt:
+        # Only process if it's a new submission
+        if send_button:
+            # Clear the input for next time
+            st.session_state.user_input = ""
+            st.session_state.input_counter += 1
 
-                    # Store assistant message with tool calls
-                    assistant_message = {
-                        "role": "assistant",
-                        "content": response['response'],
-                        "tool_calls": response.get('tool_calls', [])
-                    }
-                    st.session_state.messages.append(assistant_message)
+            # Add user message
+            st.session_state.messages.append({"role": "user", "content": prompt})
 
-                    # Display any charts or data
-                    display_tool_results(response.get('tool_calls', []))
+            # Display user message
+            with st.chat_message("user"):
+                st.markdown(prompt)
 
-                else:
-                    error_msg = f"❌ Error: {response.get('error', 'Unknown error')}"
-                    st.error(error_msg)
-                    st.session_state.messages.append({
-                        "role": "assistant",
-                        "content": error_msg
-                    })
+            # Get agent response
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    response = st.session_state.agent.chat(prompt)
+
+                    if response['success']:
+                        st.markdown(response['response'])
+
+                        # Store assistant message with tool calls
+                        assistant_message = {
+                            "role": "assistant",
+                            "content": response['response'],
+                            "tool_calls": response.get('tool_calls', [])
+                        }
+                        st.session_state.messages.append(assistant_message)
+
+                        # Display any charts or data
+                        display_tool_results(response.get('tool_calls', []))
+
+                    else:
+                        error_msg = f"❌ Error: {response.get('error', 'Unknown error')}"
+                        st.error(error_msg)
+                        st.session_state.messages.append({
+                            "role": "assistant",
+                            "content": error_msg
+                        })
+
+            # Rerun to clear input and show new messages
+            st.rerun()
 
 
 def display_tool_results(tool_calls):
