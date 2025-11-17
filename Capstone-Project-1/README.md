@@ -5,6 +5,7 @@ A Streamlit-based AI-powered chat application that allows users to interact with
 ## Features
 
 - **Natural Language Database Queries**: Ask questions in plain English and get SQL-powered answers
+- **Function Calling OpenAI API**: [View tools.py (GitHub)](https://github.com/MuminjonGuru/Masters-GenAI/blob/main/Capstone-Project-1/src/agent/tools.py)
 - **Intelligent Agent**: OpenAI-powered agent with function calling for:
   - SQL query execution with safety checks
   - Data export to CSV/Excel
