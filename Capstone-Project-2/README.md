@@ -95,8 +95,8 @@ This application implements a complete voice-to-image pipeline:
 *The application starts with a clean interface showing the record button.*
 
 #### 2️⃣ **Record Voice in Browser**
-![Record Audio](screenshots/10.png)
-*Click the microphone button and speak your image description directly in the browser!*
+<img src="screenshots/10.png" alt="Record Audio" width="250" height="400" />
+<p><em>Click the microphone button and speak your image description directly in the browser!</em></p>
 
 **Example voice input:**
 > "Create an image of a sunset over mountains with a lake in the foreground"
@@ -109,8 +109,8 @@ This application implements a complete voice-to-image pipeline:
 5. Your audio will be ready for processing!
 
 #### 3️⃣ **View Transcript**
-![Transcript](screenshots/11.png)
-*Whisper API transcribes your voice message with high accuracy.*
+<img src="screenshots/11.png" alt="Transcript" width="250" height="400" />
+<p><em>Whisper API transcribes your voice message with high accuracy.</em></p>
 
 **Transcript Output:**
 ```
@@ -119,8 +119,8 @@ Model: whisper-1 (en)
 ```
 
 #### 4️⃣ **Enhanced Prompt**
-![Enhanced Prompt](screenshots/12.png)
-*GPT-4 Turbo enhances your description with artistic details.*
+<img src="screenshots/12.png" alt="Enhanced Prompt" width="250" height="400" />
+<p><em>GPT-4 Turbo enhances your description with artistic details.</em></p>
 
 **Enhanced Prompt Output:**
 ```
@@ -133,8 +133,8 @@ Model: gpt-4-turbo
 ```
 
 #### 5️⃣ **Generated Image**
-![Generated Image](screenshots/13.png)
-*DALL-E 3 creates a stunning image based on the enhanced prompt.*
+<img src="screenshots/13.png" alt="Generated Image" width="250" height="400" />
+<p><em>DALL-E 3 creates a stunning image based on the enhanced prompt.</em></p>
 
 **Image Metadata:**
 - Model: `dall-e-3`
