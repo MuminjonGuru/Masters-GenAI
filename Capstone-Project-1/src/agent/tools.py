@@ -8,6 +8,8 @@ from typing import Dict, List, Any, Optional
 import pandas as pd
 import os
 
+from ..github_integration.issue_creator import GitHubIssueCreator
+
 # Tool definitions for OpenAI function calling
 TOOLS = [
     {
@@ -137,6 +139,23 @@ class ToolExecutor:
         self.db = db_manager
         self.logger = logger
         self.validator = safety_validator
+
+        # Initialize GitHub issue creator (lazy loading)
+        self.github_creator = None
+        self._init_github()
+
+    def _init_github(self):
+        """Initialize GitHub issue creator if credentials are available."""
+        try:
+            # Only initialize if env vars are set
+            if os.getenv("GITHUB_TOKEN") and os.getenv("GITHUB_REPO"):
+                self.github_creator = GitHubIssueCreator()
+                self.logger.info("GitHub integration initialized successfully")
+            else:
+                self.logger.warning("GitHub integration not configured (GITHUB_TOKEN or GITHUB_REPO missing)")
+        except Exception as e:
+            self.logger.warning(f"GitHub integration initialization failed: {e}")
+            self.github_creator = None
 
     def execute_sql_query(self, query: str, explanation: str) -> Dict[str, Any]:
         """
@@ -335,12 +354,11 @@ class ToolExecutor:
                              priority: str) -> Dict[str, Any]:
         """
         Create a support ticket (GitHub issue).
-        This will be implemented in the GitHub integration module.
 
         Args:
             title: Ticket title
             description: Ticket description
-            priority: Priority level
+            priority: Priority level (low, medium, high, critical)
 
         Returns:
             Dictionary with ticket creation result
@@ -350,13 +368,36 @@ class ToolExecutor:
             "priority": priority
         })
 
-        # This is a placeholder - actual implementation in github_integration module
-        return {
-            "success": False,
-            "error": "GitHub integration not yet initialized. Will be implemented in Phase 5.",
-            "ticket_url": None,
-            "ticket_number": None
-        }
+        # Check if GitHub integration is available
+        if not self.github_creator:
+            return {
+                "success": False,
+                "error": "GitHub integration not configured. Please set GITHUB_TOKEN and GITHUB_REPO in your .env file.",
+                "ticket_url": None,
+                "ticket_number": None
+            }
+
+        # Create the issue
+        try:
+            result = self.github_creator.create_issue(
+                title=title,
+                description=description,
+                priority=priority
+            )
+
+            if result['success']:
+                self.logger.info(f"Support ticket created: #{result['ticket_number']}")
+
+            return result
+
+        except Exception as e:
+            self.logger.error(f"Error creating support ticket: {e}")
+            return {
+                "success": False,
+                "error": f"Failed to create support ticket: {str(e)}",
+                "ticket_url": None,
+                "ticket_number": None
+            }
 
     def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """

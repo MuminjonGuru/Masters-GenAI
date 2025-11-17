@@ -57,6 +57,25 @@ st.markdown("""
     .assistant-message {
         background-color: #f5f5f5;
     }
+    /* Sticky chat input at bottom */
+    .stBottom {
+        position: sticky;
+        bottom: 0;
+        background-color: white;
+        padding: 1rem 0;
+        border-top: 1px solid #e0e0e0;
+        z-index: 999;
+    }
+    /* Add padding to main container for scrolling */
+    .main .block-container {
+        padding-bottom: 8rem;
+    }
+    /* Chat container with max height and scroll */
+    .chat-container {
+        max-height: 60vh;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -138,7 +157,9 @@ def display_sidebar():
             "Show top 5 products by sales",
             "List all employees",
             "What are the product categories?",
-            "Show orders from 2023"
+            "Show orders from 2023",
+            "Create a support ticket for testing the integration",
+            "I need help with a complex query, please create a support ticket"
         ]
 
         for query in sample_queries:
@@ -227,7 +248,8 @@ def display_chat_interface():
     st.markdown("---")
     st.markdown("### 💬 Chat with your Data")
 
-    # Display chat messages
+    # Display chat messages in a scrollable container
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
     chat_container = st.container()
 
     with chat_container:
@@ -240,6 +262,11 @@ def display_chat_interface():
                     with st.expander("🔧 Tool Calls", expanded=False):
                         for tool_call in message["tool_calls"]:
                             st.json(tool_call)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Sticky chat input at bottom
+    st.markdown('<div class="stBottom">', unsafe_allow_html=True)
 
     # Chat input with custom text input to support pre-filling
     col1, col2 = st.columns([6, 1])
@@ -255,6 +282,8 @@ def display_chat_interface():
 
     with col2:
         send_button = st.button("Send 🚀", use_container_width=True, type="primary")
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Process the message when send button is clicked or Enter is pressed
     if (send_button or prompt != st.session_state.user_input) and prompt:
