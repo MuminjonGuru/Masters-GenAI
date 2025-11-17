@@ -1,0 +1,14 @@
+# Core Framework
+streamlit>=1.31.0
+
+# OpenAI APIs (Whisper + GPT-4 + DALL-E)
+openai>=1.12.0
+
+# Audio Recording in Browser
+streamlit-audiorec>=0.1.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
+Pillow>=10.0.0
+colorlog>=6.8.0
