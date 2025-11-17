@@ -2,6 +2,9 @@
 
 An AI-powered application that converts voice messages into stunning images using OpenAI's state-of-the-art models.
 
+[Live Demo](https://gen-ai-capstone-two.streamlit.app/)
+
+
 ## 📋 Overview
 
 This application implements a complete voice-to-image pipeline:
