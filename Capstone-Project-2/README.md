@@ -85,6 +85,9 @@ This application implements a complete voice-to-image pipeline:
 
 ### Step-by-Step Example
 
+[![Watch the video](https://img.youtube.com/vi/u_VFhApcPEk/0.jpg)](https://youtu.be/u_VFhApcPEk)
+
+
 #### 1️⃣ **Initial Screen**
 ![Initial Screen](screenshots/01_initial_screen.png)
 *The application starts with a clean interface showing the record button.*
