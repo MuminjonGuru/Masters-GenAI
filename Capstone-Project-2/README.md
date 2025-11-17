@@ -143,7 +143,6 @@ Model: gpt-4-turbo
 - Style: `vivid`
 
 #### 6️⃣ **Console Logs**
-![Console Logs](screenshots/06_console_logs.png)
 *View detailed logs of the entire pipeline.*
 
 **Sample Logs:**
