@@ -77,13 +77,15 @@ def initialize_agent():
     """Initialize the Northwind agent."""
     if st.session_state.agent is None:
         api_key = os.getenv("OPENAI_API_KEY")
+        model = os.getenv("OPENAI_MODEL", "gpt-4-turbo")
+
         if not api_key:
             st.error("⚠️ OpenAI API key not found. Please set OPENAI_API_KEY in your .env file.")
             st.stop()
 
         try:
             with st.spinner("Initializing Northwind Agent..."):
-                st.session_state.agent = NorthwindAgent(api_key=api_key)
+                st.session_state.agent = NorthwindAgent(api_key=api_key, model=model)
                 st.session_state.db_stats = st.session_state.agent.get_database_stats()
                 st.session_state.initialized = True
         except Exception as e:
@@ -94,6 +96,12 @@ def initialize_agent():
 def display_sidebar():
     """Display sidebar with database stats and controls."""
     with st.sidebar:
+        st.markdown("### 🤖 AI Model")
+        if st.session_state.agent:
+            st.info(f"**{st.session_state.agent.model}**")
+
+        st.markdown("---")
+
         st.markdown("### 📊 Database Information")
 
         if st.session_state.db_stats:

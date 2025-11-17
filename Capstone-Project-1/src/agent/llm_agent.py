@@ -21,13 +21,13 @@ class NorthwindAgent:
     Uses OpenAI's function calling to execute tools.
     """
 
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-3.5-turbo"):
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         """
         Initialize the Northwind agent.
 
         Args:
             api_key: OpenAI API key (if None, will use environment variable)
-            model: OpenAI model to use
+            model: OpenAI model to use (if None, will use OPENAI_MODEL env var or default to gpt-4-turbo)
         """
         # Initialize OpenAI client
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
@@ -35,7 +35,7 @@ class NorthwindAgent:
             raise ValueError("OpenAI API key not provided. Set OPENAI_API_KEY environment variable.")
 
         self.client = OpenAI(api_key=self.api_key)
-        self.model = model
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4-turbo")
 
         # Initialize components
         self.db = DatabaseManager()
