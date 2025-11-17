@@ -14,6 +14,32 @@ A Streamlit-based AI-powered chat application that allows users to interact with
 - **Safety Features**: Built-in SQL injection protection and query validation
 - **Comprehensive Logging**: Console logging for all agent actions and queries
 
+<details>
+  <summary>📷 Click to expand screenshots (00 → 04)</summary>
+
+  <!-- Center row of clickable thumbnails -->
+  <p align="center">
+    <a href="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/00.png" target="_blank">
+      <img src="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/00.png" alt="screenshot-00" width="220" />
+    </a>
+    <a href="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/01.png" target="_blank">
+      <img src="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/01.png" alt="screenshot-01" width="220" />
+    </a>
+    <a href="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/02.png" target="_blank">
+      <img src="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/02.png" alt="screenshot-02" width="220" />
+    </a>
+    <a href="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/03.png" target="_blank">
+      <img src="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/03.png" alt="screenshot-03" width="220" />
+    </a>
+    <a href="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/04.png" target="_blank">
+      <img src="https://raw.githubusercontent.com/MuminjonGuru/Masters-GenAI/main/Capstone-Project-1/screenshots/04.png" alt="screenshot-04" width="220" />
+    </a>
+  </p>
+
+  <sup>Click a thumbnail to open the full-size image in a new tab.</sup>
+</details>
+
+
 ## Tech Stack
 
 - **Backend**: Python 3.9+
