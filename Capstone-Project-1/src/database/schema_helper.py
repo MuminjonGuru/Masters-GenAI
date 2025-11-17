@@ -96,41 +96,29 @@ class SchemaHelper:
         """
         tables = self.db.get_all_tables()
 
-        schema_context = "# Northwind Database Schema\n\n"
-        schema_context += "## Available Tables:\n\n"
+        schema_context = "## Database Tables:\n"
 
+        # Very concise table list with just key columns
         for table in tables:
             columns = self.db.get_table_info(table)
-            row_count = self.db.get_row_count(table)
 
-            # Table header
-            schema_context += f"### {table} ({row_count} rows)\n"
-
-            # Column list (concise format)
-            col_list = []
+            # Only show primary key and a few important columns
+            key_cols = []
             for col in columns:
-                col_name = col['name']
-                col_type = col['type']
-                markers = []
-                if col['pk']:
-                    markers.append('PK')
-                if col['notnull']:
-                    markers.append('NOT NULL')
+                if col['pk'] or len(key_cols) < 3:  # PK + max 3 other columns
+                    col_name = col['name']
+                    if col['pk']:
+                        key_cols.append(f"{col_name}*")
+                    else:
+                        key_cols.append(col_name)
 
-                if markers:
-                    col_list.append(f"{col_name} ({col_type}, {', '.join(markers)})")
-                else:
-                    col_list.append(f"{col_name} ({col_type})")
+            schema_context += f"- {table}: {', '.join(key_cols)}\n"
 
-            schema_context += "Columns: " + ", ".join(col_list) + "\n\n"
-
-        # Add relationships
-        relationships = self.get_table_relationships()
-        if relationships:
-            schema_context += "## Table Relationships:\n\n"
-            for table, rels in relationships.items():
-                for rel in rels:
-                    schema_context += f"- {rel}\n"
+        # Add only essential relationships
+        schema_context += "\n## Key Relationships:\n"
+        schema_context += "- Orders -> Customers, Employees, Shippers\n"
+        schema_context += "- Order Details -> Orders, Products\n"
+        schema_context += "- Products -> Categories, Suppliers\n"
 
         return schema_context
 
@@ -176,40 +164,11 @@ class SchemaHelper:
         Returns:
             String describing the business context
         """
-        context = """
-# Northwind Database - Business Context
+        context = """## Business Context:
+Northwind Traders is a specialty food import/export company. The database tracks customers, orders, products, employees, and suppliers.
 
-The Northwind database represents a fictional company called "Northwind Traders"
-that imports and exports specialty foods around the world.
-
-## Key Business Entities:
-
-**Customers**: Companies that purchase products from Northwind
-**Orders**: Purchase orders placed by customers
-**Order Details**: Line items for each order (products, quantities, prices)
-**Products**: Items available for sale
-**Categories**: Product categories (e.g., Beverages, Condiments, Seafood)
-**Suppliers**: Companies that supply products to Northwind
-**Employees**: Northwind staff who process orders
-**Shippers**: Shipping companies that deliver orders
-
-## Common Business Questions:
-- Sales analysis (top products, customers, employees)
-- Inventory management (products, suppliers, stock levels)
-- Order tracking and history
-- Customer analysis
-- Revenue and profitability metrics
-- Geographic sales distribution
-
-## Sample Queries You Can Ask:
-- "Show me the top 10 customers by total order value"
-- "What are the best-selling products?"
-- "List all orders from a specific customer"
-- "Which employees have the highest sales?"
-- "What products are low in stock?"
-- "Show sales by category"
-- "Which suppliers provide the most products?"
-"""
+## Common Queries:
+Sales analysis, inventory management, order tracking, customer/employee performance."""
         return context
 
 
